@@ -89,7 +89,7 @@ Este repositório será um compilado da minha tentativa de aprender mais sobre o
 | **STM32 Nucleo-F401RE**              | 1                         |                                                    |
 | **LEDs (internos e externos)**       | 5-10                      | LEDs comuns de 5mm (diversas cores)                |
 | **Botões**                           | 3-5                       | Botões de pressão (push button)                    |
-| **Sensores Analógicos (LM35, etc.)** | 1-2                       | LM35 (Temperatura), ou outros sensores analógicos  |
+| **Sensores Analógicos (LM35, LDR)** | 1-2                       | LM35 LDR(Temperatura), ou outros sensores analógicos  |
 | **Sensores Digitais (DHT11/DHT22)**  | 1-2                       | DHT11 ou DHT22 (Temperatura e Umidade)             |
 | **Driver de Motor e Motor DC**       | 1-2                       | L298N (Driver de motor) e motor DC de 6V-12V       |
 | **Display LCD (I2C)**                | 1                         | Display LCD 16x2 com interface I2C                 |
