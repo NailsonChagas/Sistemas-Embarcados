@@ -46,8 +46,8 @@ SECTIONS
     _sccm = .;
     *(.ccm)           /* Seções .ccm */
     *(.ccm*)          /* Seções .ccm* */
-    *(.ccmRamFunc)    /* Funções em CCMRAM */
-    *(.ccmRamFunc*)   /* Funções em CCMRAM */
+    *(.ccmRamFunc)    /* Funções em CCMRAM */ -> alterar o endereço
+    *(.ccmRamFunc*)   /* Funções em CCMRAM */ -> alterar o valor
     . = ALIGN(4);
     _eccm = .;
   } >CCMRAM AT> FLASH
@@ -247,3 +247,6 @@ __attribute__((section(".RamFunc"))) void funcao_em_ram(void)
 1. **CCMRAM**: Ideal para funções críticas de tempo e dados frequentemente acessados
 2. **SRAM1 e SRAM2**: Uso geral para stack, heap e dados convencionais. Acesso DMA
 3. **Inicialização**: As seções especiais requerem tratamento específico no startup
+
+Nos micros da STM32 os dados na RAM e função na FLASH tem melhor desempenho 
+Nos micros da Texas a função na RAM tem melhor desempenho
