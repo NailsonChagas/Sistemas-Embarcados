@@ -56,8 +56,9 @@ Mas, como regra geral:
     - Exemplo: usar `1.5f` em vez de `1.5`.
 
 - **Alocação de memória**
-  - Não usar `new` e `delete` em C++.
-  - Não usar `malloc`, `realloc` e `free` em C, **a menos que sejam reimplementados**.
+  - Pode ser usado malloc apenas no boot
+  - Não usar `new` e `delete` em C++ durante a execução.
+  - Não usar `malloc`, `realloc` e `free` em C durante a execução, **a menos que sejam reimplementados**.
     - `malloc` não garante tempo de execução determinístico.
     - Existem formas de alocação determinística, mas não são padrão.
 
@@ -69,3 +70,6 @@ Mas, como regra geral:
 
 - **Cobertura de código**
   - Sistemas críticos devem ter **100% de cobertura de código (code coverage)**.
+
+- **Mirroring**
+  - Se um mesmo valor deve estar em diferentes partes da memória, deve ser checado se os valores nos diferentes locais em que estão possui o mesmo valor
