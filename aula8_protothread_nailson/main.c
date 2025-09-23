@@ -15,18 +15,18 @@ typedef struct
 // Inicializa um protothread, configurando seu estado para 0.
 // É obrigatório chamar esta macro antes de executar a tarefa.
 #define PT_INIT(pt) \
-    pt.lc = 0
+    (pt)->lc = 0
 
 // Inicia a seção de código do protothread.
 // Usa um 'switch' para pular para o ponto de continuação salvo.
 #define PT_BEGIN(pt) \
-    switch(pt.lc) { case 0:
+    switch((pt)->lc) { case 0:
 
 // "Pausa" a execução até que a condição 'c' seja verdadeira.
 // Salva a linha atual ('__LINE__') como o novo estado e retorna.
 // Na próxima chamada, o 'case __LINE__' faz a execução continuar daqui.
 #define PT_WAIT_UNTIL(pt, c)  \
-    pt.lc = __LINE__; \
+    (pt)->lc = __LINE__; \
     case __LINE__: \
         if(!(c)) return 0
 
@@ -34,7 +34,7 @@ typedef struct
 // Reseta o estado para 0 para que possa ser reusado.
 #define PT_END(pt) \
     } \
-    pt.lc = 0; \
+    (pt)->lc = 0; \
     return 2
 
 // --- Seção 2: Variáveis Globais (Estado Compartilhado) ---
@@ -45,7 +45,7 @@ int i = 0; // incrementada pela tarefa1 e monitorada pela tarefa2.
 // --- Seção 3: As Tarefas que estaram dentro das Protothreads ---
 
 // Tarefa 1: Espera i ser igual a count e incrementa i.
-int tarefa1(Protothread pt, int count)
+int tarefa1(Protothread *pt, int count)
 {
     PT_BEGIN(pt);
 
@@ -61,7 +61,7 @@ int tarefa1(Protothread pt, int count)
 
 // Tarefa 2: Espera até que a variável global 'i' atinja o valor target.
 // mesmo que seja executada apenas uma vez, é feito a checagem a cada iteração do loop do main
-int tarefa2(Protothread pt, int target)
+int tarefa2(Protothread *pt, int target)
 {
     PT_BEGIN(pt);
 
@@ -83,8 +83,8 @@ int main(void)
 {
     int counter = 0;
 
-    PT_INIT(pt1);
-    PT_INIT(pt2);
+    PT_INIT(&pt1);
+    PT_INIT(&pt2);
 
     while(counter != 100)
     {
@@ -92,11 +92,11 @@ int main(void)
 
         // primeira tarefa chamada na pt1.
         // Ela vai executar e parar quando a condição não for cumprida.
-        tarefa1(pt1, counter);
+        tarefa1(&pt1, counter);
 
         // segunda tarefa chamada na pt2.
         // Ela vai executar ou esperar dependendo do valor atual de 'i'.
-        tarefa2(pt2, 30);
+        tarefa2(&pt2, 30);
         
         counter++;
     }
