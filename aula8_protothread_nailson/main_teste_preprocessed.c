@@ -1,9 +1,9 @@
-# 0 "main.c"
+# 0 "main_teste.c"
 # 0 "<built-in>"
 # 0 "<command-line>"
 # 1 "/usr/include/stdc-predef.h" 1 3 4
 # 0 "<command-line>" 2
-# 1 "main.c"
+# 1 "main_teste.c"
 # 1 "/usr/include/stdio.h" 1 3 4
 # 27 "/usr/include/stdio.h" 3 4
 # 1 "/usr/include/x86_64-linux-gnu/bits/libc-header-start.h" 1 3 4
@@ -734,57 +734,47 @@ extern int __uflow (FILE *);
 extern int __overflow (FILE *, int);
 # 902 "/usr/include/stdio.h" 3 4
 
-# 2 "main.c" 2
-# 10 "main.c"
+# 2 "main_teste.c" 2
 
-# 10 "main.c"
+
+
+
+# 5 "main_teste.c"
 typedef struct
 {
     unsigned int lc;
 } Protothread;
-# 41 "main.c"
+# 25 "main_teste.c"
 static Protothread pt1;
 static Protothread pt2;
 int i = 0;
 
 
-
-
 int tarefa1(Protothread *pt, int count)
 {
-    switch((pt)->lc) { case 0:;
-
     while(1)
     {
-        (pt)->lc = 54; case 54: if(!(i == count/2)) return 0;
+        (pt)->lc = 34; switch((pt)->lc) { case 34: if(!(i == count/2)) return 0; };
         printf("i: %i == count: %i/2\n", i, count);
 
-        (pt)->lc = 57; case 57: if(!(i == count)) return 0;
+        (pt)->lc = 37; switch((pt)->lc) { case 37: if(!(i == count)) return 0; };
         printf("i: %i == count: %i\n", i, count);
         i += 10;
     }
 
-    } (pt)->lc = 0; return 2;
+    (pt)->lc = 0; return 2;
 }
-
-
 
 int tarefa2(Protothread *pt, int target)
 {
-    switch((pt)->lc) { case 0:;
-
-    (pt)->lc = 71; case 71: if(!(i == target)) return 0;
+    (pt)->lc = 47; switch((pt)->lc) { case 47: if(!(i == target)) return 0; };
     printf("TAREFA 2 passou: i == %i\n", i);
 
-    (pt)->lc = 74; case 74: if(!(i == (target*2))) return 0;
+    (pt)->lc = 50; switch((pt)->lc) { case 50: if(!(i == (target*2))) return 0; };
     printf("TAREFA 2 passou: i == %i * 2\n", i);
 
-    } (pt)->lc = 0; return 2;
+    (pt)->lc = 0; return 2;
 }
-
-
-
-
 
 
 int main(void)
@@ -797,15 +787,8 @@ int main(void)
     while(counter != 100)
     {
         printf("--- counter: %i ---\n", counter);
-
-
-
         tarefa1(&pt1, counter);
-
-
-
         tarefa2(&pt2, 30);
-
         counter++;
     }
 

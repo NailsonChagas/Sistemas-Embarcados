@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-// gcc ./main.c -o ./main 
+// gcc ./main.c -o ./main.bin
 // gcc -E main.c -o main_preprocessed.c
 
 // --- Seção 1: Definição do Protothread e Macros de Controle ---
