@@ -44,8 +44,8 @@ int i = 0; // incrementada pela tarefa1 e monitorada pela tarefa2.
 
 // --- Seção 3: As Tarefas que estaram dentro das Protothreads ---
 
-// Tarefa 1: Espera i ser igual a count e incrementa i.
-int tarefa1(Protothread *pt, int count)
+// protothread 1: Espera i ser igual a count e incrementa i.
+int protothread1(Protothread *pt, int count)
 {
     PT_BEGIN(pt);
 
@@ -59,16 +59,16 @@ int tarefa1(Protothread *pt, int count)
     PT_END(pt);
 }
 
-// Tarefa 2: Espera até que a variável global 'i' atinja o valor target.
+// protothread 2: Espera até que a variável global 'i' atinja o valor target.
 // mesmo que seja executada apenas uma vez, é feito a checagem a cada iteração do loop do main
-int tarefa2(Protothread *pt, int target)
+int protothread2(Protothread *pt, int target)
 {
     PT_BEGIN(pt);
 
-    PT_WAIT_UNTIL(pt, i == target); // depois de passar a primeira vez ira sempre retornar 0
+    PT_WAIT_UNTIL(pt, i == target); 
     printf("TAREFA 2 passou: i == %i\n", i);
 
-    PT_WAIT_UNTIL(pt, i == (target*2)); // nunca será chamado 
+    PT_WAIT_UNTIL(pt, i == (target*2));
     printf("TAREFA 2 passou: i == %i * 2\n", i);
     
     PT_END(pt);
@@ -92,11 +92,11 @@ int main(void)
 
         // primeira tarefa chamada na pt1.
         // Ela vai executar e parar quando a condição não for cumprida.
-        tarefa1(&pt1, counter);
+        protothread1(&pt1, counter);
 
         // segunda tarefa chamada na pt2.
         // Ela vai executar ou esperar dependendo do valor atual de 'i'.
-        tarefa2(&pt2, 30);
+        protothread2(&pt2, 30);
         
         counter++;
     }

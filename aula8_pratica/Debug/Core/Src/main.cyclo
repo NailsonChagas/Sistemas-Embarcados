@@ -1,0 +1,6 @@
+../Core/Src/main.c:71:5:protothread_led	4
+../Core/Src/main.c:90:5:protothread_button	1
+../Core/Src/main.c:101:5:main	1
+../Core/Src/main.c:148:6:SystemClock_Config	3
+../Core/Src/main.c:189:13:MX_GPIO_Init	1
+../Core/Src/main.c:230:6:Error_Handler	1

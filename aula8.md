@@ -93,3 +93,22 @@ typedef struct
 ```
 
 Eliminando uma macro e um `case`vazio
+
+ou ainda
+```
+#define PT_WAIT_UNTIL(c)  \
+    if(!(c)) return 0; // sempre sai da função se a condição não bater
+```
+
+Que elimina tudo até a struct?
+
+Obs: A resposta de todos parece estar igual 
+
+Resposta: Tem que ter o switch fora para que quando entre na função novamente, caia direto no `case` em que foi parado
+
+## Observações 
+- Nào se pode usar a api da protothread dentro de um switch. Não se pode usar api de uma protothread 1 dentro de uma protothread 2 pois o `case`gerado pela macro da 1 ira criar o `case` dentro do `switch` da 2.
+
+- Pode se usar a api da protothread apenas dentro de uma protothread
+
+- Colocar o código de um macro dentro de um do{ }while(0) faz o compilador compilar todo bloco como uma linha só
