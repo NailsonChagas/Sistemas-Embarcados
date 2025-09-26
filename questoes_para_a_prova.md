@@ -5,7 +5,7 @@ Defina o que é um sistema. O que diferencia um sistema embarcado de um sistema 
 
 **Resposta:**
 Um sistema é uma combinação de componentes que atuam em conjunto para desempenhar uma função.
-Um sistema embarcado é um sistema de computação dedicado a executar funções específicas dentro de um dispositivo maior, diferindo de sistemas genéricos por seu propósito especializado.
+Um sistema embarcado é um sistema composto por elementos computacionais colaborativos destinados a executar funções específicas, diferindo de sistemas genéricos por seu propósito especializado.
 
 **Características desejadas em sistemas embarcados:**
 
