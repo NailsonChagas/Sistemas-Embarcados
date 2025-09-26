@@ -194,7 +194,9 @@ $$
 Por que é importante que em sistemas operacionais preemptivos se utilize funções reentrantes? Caso não seja possível, como pode-se proteger uma função não-reentrante para o uso seguro em sistemas preemptivos?
 
 **Resposta:**
-Ainda não respondida.
+Função reentrante é uma função que pode ser executada concorrentemente por múltiplas tarefas ou threads de forma segura, sem que uma execução interfira na outra. Em sistemas preemptivos, onde uma tarefa pode ser interrompida a qualquer momento para dar lugar a outra, utilizar funções reentrantes é essencial para evitar condições de corrida, corrupção de dados ou comportamento imprevisível.
+
+Caso uma função não seja reentrante, é possível protegê-la utilizando mecanismos como semáforos, garantindo que apenas uma tarefa acesse a função por vez.
 
 ---
 
