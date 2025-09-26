@@ -161,15 +161,14 @@ A memória FLASH apresenta duas limitações principais em relação à RAM: mai
 **Soluções possíveis:**
 
 * **Wait states**: CPU aguarda ciclos extras até a FLASH fornecer dados.
-
   * *Vantagem*: simples, amplamente suportado.
   * *Desvantagem*: reduz desempenho efetivo.
-* **Cache em SRAM**: blocos acessados recentemente ficam em SRAM.
 
+* **Cache em SRAM**: blocos acessados recentemente ficam em SRAM.
   * *Vantagem*: desempenho muito melhor em acessos repetitivos.
   * *Desvantagem*: maior custo e área no chip.
+  
 * **Prefetch buffer**: busca antecipada de instruções sequenciais.
-
   * *Vantagem*: eficiente em execuções lineares.
   * *Desvantagem*: pouco eficaz em programas com muitos desvios.
 
