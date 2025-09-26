@@ -206,7 +206,7 @@ Caso uma função não seja reentrante, é possível protegê-la utilizando meca
 Imagine que você está implementando uma fonte de corrente controlada a partir de um conversor CC-CC. Essa fonte deve ter corrente de saída entre 0,01 e 1,0, sendo que o sensor de corrente utilizado tem resolução conforme a figura abaixo e está alimentado com 3,3V. O sinal PWM utilizado no controle deve ser de 100 kHz e o processador utilizado será de ponto fixo, com 160 MHz de frequência de clock e 32 bits de barramento. O conversor A/D utilizado será de 12 bits, com referências em 0V e 3,3V. A técnica de controle utilizada será um PI com a seguinte característica:
 
 $$
-D_n = D_{n-1} + 0,05859 \cdot Erro - 0,00957 \cdot Erro
+D_n = D_{n-1} + 0,05859 \cdot Erro_{n} - 0,00957 \cdot Erro_{n-1}
 $$
 
 A referência de controle será fornecida por um potenciômetro ligado a uma fonte de 3,3V, conectado em outro canal do conversor A/D. Utilizando base Q, projete o fator de correção utilizado para o cálculo do valor de erro e determine uma base Q coerente para os ganhos do controlador PI e para o módulo gerador do sinal PWM. Escreva o código em C para implementar esse controlador, considerando que o valor atual do sensor de corrente encontra-se em uma variável chamada `AD_value` e que o valor adquirido do divisor resistivo se encontra em uma variável de nome `referencia`.
