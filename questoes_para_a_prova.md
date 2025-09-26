@@ -233,8 +233,8 @@ Freq_processador / Freq_PWM = 150e6 / 100e3 = 1500
 
 ```c
 // Definição dos ganhos em ponto fixo
-static uint32_t Kp_Q17     = 7680; // Kp em Q17
-static uint32_t KpKi_Q17   = 1254; // Kp * Ki em Q17
+static const uint32_t Kp_Q17     = 7680; // Kp em Q17
+static const uint32_t KpKi_Q17   = 1254; // Kp * Ki em Q17
 
 // Conversão dos valores A/D para Q12
 uint32_t AD_valueQ12 = AD_value * 3;
