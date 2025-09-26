@@ -221,11 +221,11 @@ Conversor A/D de 12 bits: (2^12) - 1 = 4095
 Resolução de corrente: 0,01 A
 
 Fator de conversão para Q12:
-corrente: round((2 * 2^12) / 4095) ≈ 2
-referência: round((3 * 2^12) / 4095) ≈ 3
+corrente: round((3 * 2^12) / 4095) = 3
+referência: round((3 * 2^12) / 4095) = 3
 
 Relação entre clock do processador e PWM:
-Freq_processador / Freq_PWM = 150e6 / 100e3 ≈ 1500
+Freq_processador / Freq_PWM = 150e6 / 100e3 = 1500
 */
 ```
 
@@ -237,7 +237,7 @@ static uint32_t Kp_Q17     = 7680; // Kp em Q17
 static uint32_t KpKi_Q17   = 1254; // Kp * Ki em Q17
 
 // Conversão dos valores A/D para Q12
-uint32_t AD_valueQ12 = AD_value * 2;
+uint32_t AD_valueQ12 = AD_value * 3;
 uint32_t RefQ12      = referencia * 3;
 
 // Cálculo do erro
