@@ -185,20 +185,7 @@ $$
 
 ---
 
-### **9) Keyword `static` em C**
-
-**Pergunta:**
-No que implica utilizar o keyword `static` em um código desenvolvido em linguagem C, tanto para variáveis globais quanto para variáveis locais. E para funções?
-
-**Resposta:**
-
-* **Variáveis locais**: deixam de ser criadas e destruídas a cada chamada da função, permanecendo ativas durante toda a execução do programa e preservando valores.
-* **Variáveis globais**: restringem escopo ao arquivo de declaração, evitando conflitos.
-* **Funções**: limitam visibilidade ao arquivo, funcionando como encapsulamento (similar a `private` em C++/Java).
-
----
-
-### **10) Funções reentrantes em sistemas preemptivos**
+### **9) Funções reentrantes em sistemas preemptivos**
 
 **Pergunta:**
 Por que é importante que em sistemas operacionais preemptivos se utilize funções reentrantes? Caso não seja possível, como pode-se proteger uma função não-reentrante para o uso seguro em sistemas preemptivos?
@@ -208,7 +195,7 @@ Ainda não respondida.
 
 ---
 
-### **11) Projeto de controlador PI em ponto fixo**
+### **10) Projeto de controlador PI em ponto fixo**
 
 **Pergunta:**
 Imagine que você está implementando uma fonte de corrente controlada a partir de um conversor CC-CC. Essa fonte deve ter corrente de saída entre 0,01 e 1,0, sendo que o sensor de corrente utilizado tem resolução conforme a figura abaixo e está alimentado com 3,3V. O sinal PWM utilizado no controle deve ser de 100 kHz e o processador utilizado será de ponto fixo, com 160 MHz de frequência de clock e 32 bits de barramento. O conversor A/D utilizado será de 12 bits, com referências em 0V e 3,3V. A técnica de controle utilizada será um PI com a seguinte característica:
@@ -224,14 +211,18 @@ Ainda não respondida.
 
 ---
 
-### **12) `static` e `volatile` em variáveis e funções**
+### **11) `static` e `volatile` em variáveis e funções**
 
 **Pergunta:**
 O que significa `static` e `volatile` para variáveis globais, locais e funções?
 
 **Resposta:**
 
-* **`static`**: já detalhado na questão 9.
+* **`static`**: 
+  * **Variáveis locais**: deixam de ser criadas e destruídas a cada chamada da função, permanecendo ativas durante toda a execução do programa e preservando valores.
+  * **Variáveis globais**: restringem escopo ao arquivo de declaração, evitando conflitos.
+  * **Funções**: limitam visibilidade ao arquivo, funcionando como encapsulamento (similar a `private` em C++/Java).
+
 * **`volatile`**: indica que o valor da variável pode mudar de forma imprevisível (hardware ou interrupções), impedindo otimizações perigosas do compilador.
 
   * Pode ser usado em variáveis globais ou locais.
