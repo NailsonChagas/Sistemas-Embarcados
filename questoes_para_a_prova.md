@@ -101,7 +101,7 @@ Descreva a implementação de uma máquina de estados finitos através de pontei
 **Resposta:**
 Uma máquina de estados finitos implementada com ponteiros de funções é aquela em que cada estado é representado por uma função. Para estruturar essa máquina, cria-se uma struct chamada `SM`, que contém, no mínimo, um array com ponteiros para todas as funções correspondentes aos estados possíveis, chamado de `actions`, e um índice indicando o estado atual da máquina, chamado de `state`.
 
-Para executar a máquina de estados, é usado uma função que recebe como parâmetros as entradas do estado e máquina de estados a ser usada. Essa função invoca, internamente, `action[state](parâmetros)`, executando o estado atual. Caso ocorra a transição para outro estado, o índice `state` é atualizado para refletir o novo estado.
+Para executar a máquina de estados, é usado uma função que recebe como parâmetros as entradas do estado e máquina de estados a ser usada. Essa função invoca, internamente, `sm->action[sm->state](sm, parâmetros)`, executando o estado atual. Caso ocorra a transição para outro estado, o índice `state` é atualizado para refletir o novo estado.
 
 Para se criar multiplas maquinas de estado simplesmente devem ser iniciadas outras structs `SM`, como cada uma tem um `state` diferente, elas serão independentes.
 
