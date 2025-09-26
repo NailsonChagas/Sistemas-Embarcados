@@ -45,10 +45,41 @@ Quais são as principais diferenças das arquiteturas RISC e CISC? Qual o impact
 ### **3) Protothreads**
 
 **Pergunta:**
-Explique o princípio de funcionamento das protothreads. Que limitação existe no uso de switch/case dentro de uma protothread? É possível utilizar a API das protothreads dentro de funções que serão chamadas por uma protothread? Se sim, como isso é possível. Por que as variáveis dentro de uma protothread precisam ser declaradas com o keyword `static`? Finalmente, comente sobre as principais vantagens de se utilizar protothreads quando comparado ao laço infinito tradicional.
+Explique o princípio de funcionamento das protothreads. Que limitação existe no uso de `switch/case` dentro de uma protothread? É possível utilizar a API das protothreads dentro de funções que serão chamadas por uma protothread? Se sim, como isso é possível? Por que as variáveis dentro de uma protothread precisam ser declaradas com o keyword `static`? Finalmente, comente sobre as principais vantagens de se utilizar protothreads quando comparado ao laço infinito tradicional.
 
 **Resposta:**
-Ainda não respondida.
+Protothreads são uma técnica que simula threads por meio de máquinas de estados, utilizando macros e o retorno da linha onde as instruções de espera são chamadas. Essa abordagem oferece baixo consumo de memória e maior simplicidade, tornando o desenvolvimento mais prático em sistemas que não se pode usar threads reais.
+
+Não é possível utilizar a API das protothreads dentro de funções chamadas por uma protothread, pois as macros de espera (`PT_WAIT_UNTIL`, por exemplo) geram instruções `case`. Caso essas macros sejam usadas dentro de funções, o `case` seria inserido em um `switch` incorreto.
+
+Precisam ser declaradas com o keyword `static`, pois, sem isso, seus valores seriam perdidos ao final de cada chamada da função dentro do laço principal (`main loop`). 
+
+A principal vantagem de se utilizar protothreads em comparação com o laço infinito tradicional é que o código se torna mais **organizado, modular e legível**, dispensando a necessidade de implementar manualmente várias máquinas de estado explícitas.
+
+**Exemplo simplificado de funcionamento:**
+
+```c
+typedef struct {
+  uint32_t lc; // Armazena o estado (linha em que parou) da protothread
+} pt;
+
+// Inicia o estado da máquina como 0
+#define PT_INIT(pt) (pt)->lc = 0
+
+// Cria o switch da máquina de estados, começando sempre no case 0
+#define PT_BEGIN(pt) switch((pt)->lc) { case 0:
+
+// Espera até que a condição seja verdadeira
+#define PT_WAIT_UNTIL(pt, condition) \
+  (pt)->lc = __LINE__; \
+  case __LINE__: \
+  if(!(condition)) return 0
+
+// Fecha o switch, reseta o estado e indica que terminou
+#define PT_END(pt) } \
+  (pt)->lc = 0; \
+  return 2
+```
 
 ---
 
@@ -143,6 +174,10 @@ A memória FLASH apresenta duas limitações principais em relação à RAM: mai
   * *Desvantagem*: pouco eficaz em programas com muitos desvios.
 
 **Cálculo dos wait states (tempo de acesso = 33,3 ns):**
+
+$$
+N_{\text{states}} = \left\lceil \frac{T_{\text{acesso}}}{T_{\text{clock do processador}}} - 1 \right\rceil
+$$
 
 * 30 MHz → período ≈ 33,3 ns → **0 wait states**
 * 60 MHz → período ≈ 16,7 ns → **2 wait states**
