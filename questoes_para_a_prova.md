@@ -225,7 +225,7 @@ corrente: round((2 * 2^12) / 4095) ≈ 2
 referência: round((3 * 2^12) / 4095) ≈ 3
 
 Relação entre clock do processador e PWM:
-Freq_processador / Freq_PWM = 160e6 / 100e3 ≈ 1600
+Freq_processador / Freq_PWM = 150e6 / 100e3 ≈ 1500
 */
 ```
 
