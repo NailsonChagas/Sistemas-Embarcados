@@ -221,11 +221,11 @@ Conversor A/D de 12 bits: (2^12) - 1 = 4095
 Resolução de corrente: 0,01 A
 
 Fator de conversão para Q12:
-corrente: round((3 * 2^12) / 4095) = 3
-referência: round((3 * 2^12) / 4095) = 3
+corrente: round((3.3 * 2^12) / 4095) = 3
+referência: round((3.3 * 2^12) / 4095) = 3
 
 Relação entre clock do processador e PWM:
-Freq_processador / Freq_PWM = 150e6 / 100e3 = 1500
+Freq_processador / Freq_PWM = 160e6 / 100e3 = 1600
 */
 ```
 
@@ -255,7 +255,7 @@ last_duty_cycleQ29 = curr_duty_cycleQ29;
 last_errQ12        = curr_errQ12;
 
 // Conversão para o módulo PWM (considerando fator de 1500)
-duty_cycle = (curr_duty_cycleQ29 * 1500) >> 29;
+duty_cycle = (curr_duty_cycleQ29 * 1600) >> 29;
 ```
 
 
