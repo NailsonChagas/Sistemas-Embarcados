@@ -89,7 +89,7 @@ typedef struct {
 A pilha (stack) de um sistema computacional é uma das regiões de memória mais importantes para o desenvolvimento de uma aplicação. Comente: quais são os principais usos da pilha, em que tipo de memória é implementada a pilha e aonde a pilha fica nessa memória, como definimos o tamanho da pilha e o que é estouro de pilha.
 
 **Resposta:**
-Ainda não respondida.
+A pilha é usada para armazenar variáveis locais, parametros, endereços de retorno e contexto de funções. Normalmente é implementada na RAM, crescendo ou decrescendo a partir de um endereço pré-definido. O tamanho da pilha é definido na configuração do sistema. O estouro de pilha ocorre quando o espaço reservado é excedido, sobrescrevendo outras áreas da memória e causando falhas na aplicação.
 
 ---
 
