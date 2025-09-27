@@ -54,7 +54,7 @@ Não é possível utilizar a API das protothreads dentro de funções chamadas p
 
 Precisam ser declaradas com o keyword `static`, pois, sem isso, seus valores seriam perdidos ao final de cada chamada da função dentro do laço principal (`main loop`). 
 
-A principal vantagem de se utilizar protothreads em comparação com o laço infinito tradicional é que o código se torna mais **organizado, modular e legível**, dispensando a necessidade de implementar manualmente várias máquinas de estado explícitas.
+A principal vantagem de se utilizar protothreads em comparação com o laço infinito tradicional é que o código se torna mais **organizado, modular e legível**, dispensando a necessidade de implementar manualmente várias máquinas de estado explícitas. Não disperdiçar energia com loops infinitos, emular concorrencia
 
 **Exemplo simplificado de funcionamento:**
 
@@ -89,7 +89,7 @@ typedef struct {
 A pilha (stack) de um sistema computacional é uma das regiões de memória mais importantes para o desenvolvimento de uma aplicação. Comente: quais são os principais usos da pilha, em que tipo de memória é implementada a pilha e aonde a pilha fica nessa memória, como definimos o tamanho da pilha e o que é estouro de pilha.
 
 **Resposta:**
-A pilha é usada para armazenar variáveis locais, parametros, endereços de retorno e contexto de funções. Normalmente é implementada na RAM, crescendo ou decrescendo a partir de um endereço pré-definido. O tamanho da pilha é definido na configuração do sistema. O estouro de pilha ocorre quando o espaço reservado é excedido, sobrescrevendo outras áreas da memória e causando falhas na aplicação.
+A pilha é usada para armazenar variáveis locais, parametros, endereços de retorno e contexto de funções. Normalmente é implementada na RAM, crescendo ou decrescendo a partir de um endereço pré-definido. O tamanho da pilha é definido na configuração do sistema (linker). O estouro de pilha ocorre quando o espaço reservado é excedido, sobrescrevendo outras áreas da memória e causando falhas na aplicação.
 
 ---
 
@@ -129,14 +129,12 @@ Comente sobre as diferenças existentes entre sistemas foreground/background, co
 **Resposta:**
 
 **Superlaço (foreground/background/baremetal):**
-
 * Programa principal em loop de repetição
 * Interrupções tratam eventos assíncronos
 * Evento assíncrono: não pode ser previsto (não depende do código executado no momento)
 * Evento síncrono: pode ser previsto (depende do código executado no momento)
 
 **Núcleo RTOS Cooperativo:**
-
 * Tarefas devem liberar explicitamente o controle da CPU
 * Baixa latência em interrupções
 * Permite uso de funções não reentrantes
@@ -145,7 +143,6 @@ Comente sobre as diferenças existentes entre sistemas foreground/background, co
 * Tarefas de alta prioridade podem esperar por tarefas de menor prioridade
 
 **Núcleo RTOS Preemptivo (ex.: escalonamento Round-robin):**
-
 * Tarefas de maior prioridade interrompem as de menor prioridade
 * Tempo de execução determinístico para tarefas de alta prioridade
 * Requer cuidado com funções reentrantes
@@ -160,24 +157,20 @@ Comente sobre as diferenças existentes entre sistemas foreground/background, co
 Qual é a principal limitação da memória FLASH em sistemas embarcados, quando processadores com clocks de barramento de dezenas de MHz (acima de 20 MHz) são utilizados? Que soluções podem ser aplicadas para se minimizar esta limitação? Comente sobre cada uma dessas soluções, destacando vantagens e desvantagens. Adicionalmente, considere que a memória FLASH utilizada em um microcontrolador tenha tempo de acesso de 33,3ns. Quantos wait states seriam necessários para acessar essa memória com o clock do microcontrolador em 30, 60 e 160 MHz?
 
 **Resposta:**
-A memória FLASH apresenta duas limitações principais em relação à RAM: maior consumo de energia e menor desempenho, devido ao seu tempo de acesso. Quando a frequência da CPU é superior à da FLASH, o processador precisa aguardar a conclusão do acesso, desperdiçando ciclos de clock.
+A memória FLASH apresenta duas limitações principais em relação à RAM: maior consumo de energia e menor desempenho, devido ao seu tempo de acesso (dessincronia com o processador). Quando a frequência da CPU é superior à da FLASH, o processador precisa aguardar a conclusão do acesso, desperdiçando ciclos de clock.
 
 **Soluções possíveis:**
-
 * **Wait states**: CPU aguarda ciclos extras até a FLASH fornecer dados.
   * *Vantagem*: simples, amplamente suportado.
   * *Desvantagem*: reduz desempenho efetivo.
-
 * **Cache em SRAM**: blocos acessados recentemente ficam em SRAM.
   * *Vantagem*: desempenho muito melhor em acessos repetitivos.
   * *Desvantagem*: maior custo e área no chip.
-
 * **Prefetch buffer**: busca antecipada de instruções sequenciais.
   * *Vantagem*: eficiente em execuções lineares.
   * *Desvantagem*: pouco eficaz em programas com muitos desvios.
 
 **Cálculo dos wait states (tempo de acesso = 33,3 ns):**
-
 $$
 N_{\text{states}} = \left\lceil \frac{T_{\text{acesso}}}{T_{\text{clock do processador}}} - 1 \right\rceil
 $$
@@ -277,3 +270,18 @@ O que significa `static` e `volatile` para variáveis globais, locais e funçõe
 
   * Pode ser usado em variáveis globais ou locais.
   * Não existe o conceito de funções `volatile`.
+
+---
+
+### **12) Escopo de declaração de variável**
+
+**Pergunta:**
+Em que seção da memória variáveis globais/static não iniciadas vão parar? Qual seu valor inicial?
+Em que seção da memória variáveis globais/static iniciadas vão parar?
+Em que seção da memória variáveis locais vão parar?
+
+**Resposta:**
+
+* **Variáveis globais/static não iniciadas**: são alocadas na seção **BSS** da memória e possuem valor inicial **0**.
+* **Variáveis globais/static iniciadas**: são alocadas na seção **DATA** da memória, recebendo o valor definido na declaração.
+* **Variáveis locais**: são alocadas na **stack** (pilha). Caso não sejam inicializadas, contêm **lixo de memória**.
