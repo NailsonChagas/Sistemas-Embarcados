@@ -34,6 +34,17 @@ Quais são as principais diferenças das arquiteturas RISC e CISC? Qual o impact
 | Pipeline mais eficiente      | Pipeline menos eficiente           |
 | Programas geralmente maiores | Programas geralmente menores       |
 
+### SLIDE SISTEMAS EMBARCADOS
+| **CISC**                                                                 | **RISC**                                                                 |
+| ------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
+| Ênfase em *hardware*                                                     | Ênfase em *software*                                                     |
+| Inclui instruções complexas com execução em múltiplos ciclos de clock     | Poucas instruções com execução em um ciclo de clock                      |
+| Operações com memória incluídas nas instruções                           | LOAD e STORE são instruções exclusivas para acesso à memória             |
+| Códigos pequenos com alta taxa de ciclos por segundo                     | Poucos ciclos por segundo, códigos maiores                               |
+| Maior quantidade de transistores para armazenamento de instruções complexas | Ocupa mais transistores em registradores                                 |
+
+
+
 **Impacto no conjunto de instruções:**
 
 * **RISC**: conjunto reduzido de instruções simples e padronizadas
@@ -285,3 +296,5 @@ Em que seção da memória variáveis locais vão parar?
 * **Variáveis globais/static não iniciadas**: são alocadas na seção **BSS** da memória e possuem valor inicial **0**.
 * **Variáveis globais/static iniciadas**: são alocadas na seção **DATA** da memória, recebendo o valor definido na declaração.
 * **Variáveis locais**: são alocadas na **stack** (pilha). Caso não sejam inicializadas, contêm **lixo de memória**.
+
+
