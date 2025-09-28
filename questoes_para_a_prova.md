@@ -5,7 +5,7 @@ Defina o que é um sistema. O que diferencia um sistema embarcado de um sistema 
 
 **Resposta:**
 Um sistema é uma combinação de componentes que atuam em conjunto para desempenhar uma função.
-Um sistema embarcado é um sistema de computação dedicado a executar funções específicas dentro de um dispositivo maior, diferindo de sistemas genéricos por seu propósito especializado.
+Um sistema embarcado é um sistema composto por elementos computacionais colaborativos destinados a executar funções específicas, diferindo de sistemas genéricos por seu propósito especializado.
 
 **Características desejadas em sistemas embarcados:**
 
@@ -33,6 +33,17 @@ Quais são as principais diferenças das arquiteturas RISC e CISC? Qual o impact
 | Execução mais eficiente      | Pode demandar mais ciclos de clock |
 | Pipeline mais eficiente      | Pipeline menos eficiente           |
 | Programas geralmente maiores | Programas geralmente menores       |
+
+### SLIDE SISTEMAS EMBARCADOS
+| **CISC**                                                                 | **RISC**                                                                 |
+| ------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
+| Ênfase em *hardware*                                                     | Ênfase em *software*                                                     |
+| Inclui instruções complexas com execução em múltiplos ciclos de clock     | Poucas instruções com execução em um ciclo de clock                      |
+| Operações com memória incluídas nas instruções                           | LOAD e STORE são instruções exclusivas para acesso à memória             |
+| Códigos pequenos com alta taxa de ciclos por segundo                     | Poucos ciclos por segundo, códigos maiores                               |
+| Maior quantidade de transistores para armazenamento de instruções complexas | Ocupa mais transistores em registradores                                 |
+
+
 
 **Impacto no conjunto de instruções:**
 
@@ -285,3 +296,5 @@ Em que seção da memória variáveis locais vão parar?
 * **Variáveis globais/static não iniciadas**: são alocadas na seção **BSS** da memória e possuem valor inicial **0**.
 * **Variáveis globais/static iniciadas**: são alocadas na seção **DATA** da memória, recebendo o valor definido na declaração.
 * **Variáveis locais**: são alocadas na **stack** (pilha). Caso não sejam inicializadas, contêm **lixo de memória**.
+
+
