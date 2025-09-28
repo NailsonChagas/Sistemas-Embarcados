@@ -222,5 +222,79 @@ Isso permite que o processador acesse a memória mais rapidamente, reduzindo a l
   - Requer controle adicional para gerenciar a parte volátil e não volátil
 
 
+---
+
+## FSM com switch-case
+
+### Projeto de Software
+
+O projeto de software pode ser organizado seguindo um **modelo em camadas**, que separa responsabilidades e facilita a manutenção:
+
+1. **Camada de Aplicação**  
+   - Implementa a lógica principal do sistema (regras de negócio).  
+   - Define os estados e transições da FSM utilizando `switch-case`.  
+   - Interage apenas com a camada de sistema, sem depender diretamente do hardware.  
+
+2. **Camada de Sistema**  
+   - Fornece serviços básicos para a aplicação, como temporização, filas, comunicação e gerenciamento de eventos.  
+   - Faz a ponte entre a aplicação e o hardware.  
+   - Encapsula detalhes de baixo nível, permitindo que a FSM seja mais portátil.  
+
+3. **Camada de Abstração de Hardware (HAL - Hardware Abstraction Layer)**  
+   - Contém drivers e rotinas de baixo nível para acesso ao hardware (GPIO, UART, SPI, ADC, etc.).  
+   - Fornece interfaces padronizadas que a camada de sistema utiliza.  
+   - Permite que o mesmo software funcione em diferentes plataformas com mudanças mínimas.  
+
+### Background e Foreground
+<p align="center">
+  <img src="./src/background-foreground.png" alt="Mapa de Memória">
+</p>
+
+Em sistemas embarcados simples, a execução do software geralmente segue o modelo **background/foreground**.
+
+- **Background**  
+  - Corresponde a um **laço infinito** (main loop) que executa continuamente.  
+  - Esse laço chama módulos ou funções responsáveis por realizar as operações desejadas, como leitura de sensores, atualização de variáveis ou envio de dados.  
+  - É considerado o processamento **não prioritário**, pois executa apenas quando não há tarefas mais urgentes.  
+
+- **Foreground**  
+  - Corresponde às **interrupções** ou rotinas que interrompem o fluxo normal do programa para tratar eventos imediatos (ex.: timer, recepção de dados pela UART, acionamento de botão).  
+  - É considerado o processamento **prioritário**, pois ocorre de forma assíncrona e deve ser atendido rapidamente.  
+
+### Máquinas de Estados Finitos (FSM)
+
+As **Máquinas de Estados Finitos (Finite State Machines — FSM)** constituem uma técnica mais organizada para projetar o software de um sistema embarcado.  
+Nela, o sistema é modelado em **estados bem definidos**, onde cada estado representa uma condição ou modo de operação específico.  
+
+- Em cada estado, o sistema executa apenas a **tarefa associada** àquele estado.  
+- A transição entre estados ocorre de acordo com **eventos ou condições pré-definidas** (ex.: interrupções, entrada de dados, temporizadores).  
+- Essa abordagem torna o software **mais estruturado, legível e de fácil manutenção**, além de facilitar a depuração e a expansão do sistema.  
+
+Exemplo: 
+
+```c
+int main(void){
+    char slot;
+    while(1){
+        switch(slot){
+            case 0:
+                LeTeclado(); slot = 1; break;
+            case 1: 
+                AtualizaDisplay(); slot = 2; break;
+            case 2: 
+                RecebeSerial(); slot = 3; break;
+            case 3: 
+                AtualizaDisplay(); slot = 4; break;
+            case 4:
+                EnviaSerial(); slot = 5; break;
+            case 5:
+                AtualizaDisplay(); slot = 2; break;
+            default: 
+                slot = 0; break;
+        }
+    }
+}
+```
+
 
 
