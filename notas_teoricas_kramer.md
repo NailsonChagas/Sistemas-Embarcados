@@ -107,5 +107,120 @@ struct exemplo3 {
 * **exemplo2** ocupa 5 bytes, mas pode ser mais lento de acessar.
 * **exemplo3** força alinhamento de 2 bytes, útil em protocolos ou mapeamento de hardware.
 
+--- 
+
+## Memórias em Sistemas Embarcados
+
+### SDRAM e SRAM
+
+- **SRAM - Static Random Access Memory**
+  - Memória volátil
+  - Não necessita de refresh
+  - Cada célula de armazenamento de um bit é implementada com um circuito de 6 transistores
+  - Mantém o valor enquanto houver energia
+  - Relativamente insensível a distúrbios, como ruídos elétricos
+  - Mais rápida, porém de maior custo que memórias do tipo DRAM
+  - Custo de energia menor e estável
+
+- **SDRAM - Synchronous Dynamic Random Access Memory**
+  - Cada célula armazena um bit com um transistor e um capacitor
+  - Os valores devem ser recarregados periodicamente (refresh a cada 10–100 ms)
+  - Sensível a distúrbios
+  - Mais lenta e mais barata que as memórias SRAM
+  - Aumento de consumo conforme a temperatura
+  - Pode gerar falhas de segurança devido à sensibilidade a interferências
+
+> O ideal, devido às suas vantagens, é a utilização de **SRAM** em sistemas; no entanto, seu alto custo torna inviável o uso em muitos projetos. Por isso, sistemas menos críticos frequentemente utilizam **SDRAM**, que apresenta maior capacidade e menor custo, mesmo com desempenho inferior à SRAM.
+
+### Memória Flash
+
+- Memórias do tipo **não volátil**
+- Mantêm os dados mesmo na ausência de energia
+- Utilizadas para armazenamento permanente, como firmware, sistemas embarcados e dispositivos USB
+- Mais lenta que SRAM e SDRAM em leitura e escrita
+- Não requer refresh, mas possuem ciclo limitado de gravação/apagamento
+
+#### Assincronia entre processador e Flash
+
+A Flash possui **menor desempenho e é menos eficiente que a RAM**
+
+Quando a frequência do processador é maior que a da memória Flash, ocorre uma **assincronia entre eles**, o que compromete o desempenho do processador, que precisa aguardar a memória responder às operações de leitura ou escrita.  
+
+Para mitigar esse problema, normalmente são utilizados três métodos:
+
+* **Inserir wait-cycles durante o acesso à Flash**  
+  - **Vantagens:**  
+    - Solução de baixo custo  
+    - Simples de implementar  
+  - **Desvantagens:**  
+    - Ainda há perda de desempenho devido à diferença de velocidade entre processador e memória  
+    - Não melhora a eficiência em operações intensivas de leitura/escrita  
+
+* **Uso de cache**  
+  - **Vantagens:**  
+    - Reduz significativamente o número de acessos à memória lenta  
+    - Melhora consideravelmente o desempenho do processador  
+  - **Desvantagens:**  
+    - Aumenta a complexidade do hardware  
+    - Consome mais área de memória (SRAM)  
+    - Pode gerar inconsistência se o cache não for corretamente gerenciado  
+    - Possui comportamento não determinístico, principalmente em aplicações de tempo real
+
+* **Prefetching ou buffers**  
+  - **Vantagens:**  
+    - Permite que o processador continue executando sem esperar pela memória lenta  
+    - Aumenta o throughput em leitura sequencial de dados  
+  - **Desvantagens:**  
+    - Implementação mais complexa  
+    - Eficaz principalmente para padrões de acesso previsíveis  
+    - Pode desperdiçar energia e memória se dados pré-carregados não forem utilizados
+
+* **Copiar código da FLASH para a RAM**  
+  - **Vantagens:**  
+    - Desempenho máximo do sistemas  
+  - **Desvantagens:**  
+    - Solução de alto custo
+
+#### Modo de aceleração de memória
+
+Outra maneira de melhorar o desempenho é utilizar o **modo de aceleração de memória**, no qual o **barramento da memória Flash é aumentado**.  
+Isso permite que o processador acesse a memória mais rapidamente, reduzindo a latência de leitura e melhorando a eficiência geral do sistema.  
+
+- **Vantagens:**  
+  - Reduz o tempo de espera do processador  
+  - Melhora o desempenho em comparação ao acesso normal à Flash  
+
+- **Desvantagens:**  
+  - Pode aumentar o consumo de energia  
+  - Nem todos os dispositivos suportam esse modo  
+  - Limites físicos da memória podem restringir o ganho de desempenho
+
+### EEPROM (Electrically Erasable Programmable Read-Only Memory)
+
+- **Vantagens:**  
+  - Não volátil, mantém os dados mesmo sem energia  
+  - Permite regravação elétrica sem remover o chip  
+
+- **Desvantagens:**  
+  - Velocidade de escrita e leitura baixa  
+  - Número limitado de ciclos de escrita (baixa durabilidade)  
+
+---
+
+### FlexMemory
+
+- **Descrição:**  
+  - Opção alternativa à EEPROM, geralmente combinando memória Flash e RAM  
+  - Pode ser usada para armazenamento não volátil com maior flexibilidade  
+
+- **Vantagens:**  
+  - Maior capacidade de armazenamento comparado à EEPROM  
+  - Possibilidade de leitura/escrita mais rápida  
+
+- **Desvantagens:**  
+  - Mais complexa e geralmente mais cara  
+  - Requer controle adicional para gerenciar a parte volátil e não volátil
+
+
 
 
