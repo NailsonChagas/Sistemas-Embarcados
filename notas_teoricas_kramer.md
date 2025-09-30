@@ -245,21 +245,6 @@ O projeto de software pode ser organizado seguindo um **modelo em camadas**, que
    - Fornece interfaces padronizadas que a camada de sistema utiliza.  
    - Permite que o mesmo software funcione em diferentes plataformas com mudanças mínimas.  
 
-### Background e Foreground
-<p align="center">
-  <img src="./src/background-foreground.png" alt="Mapa de Memória">
-</p>
-
-Em sistemas embarcados simples, a execução do software geralmente segue o modelo **background/foreground**.
-
-- **Background**  
-  - Corresponde a um **laço infinito** (main loop) que executa continuamente.  
-  - Esse laço chama módulos ou funções responsáveis por realizar as operações desejadas, como leitura de sensores, atualização de variáveis ou envio de dados.  
-  - É considerado o processamento **não prioritário**, pois executa apenas quando não há tarefas mais urgentes.  
-
-- **Foreground**  
-  - Corresponde às **interrupções** ou rotinas que interrompem o fluxo normal do programa para tratar eventos imediatos (ex.: timer, recepção de dados pela UART, acionamento de botão).  
-  - É considerado o processamento **prioritário**, pois ocorre de forma assíncrona e deve ser atendido rapidamente.  
 
 ### Máquinas de Estados Finitos (FSM)
 
@@ -296,5 +281,354 @@ int main(void){
 }
 ```
 
+---
+## Programação Concorrente - Sistemas de Tempo Real
 
+### Sistemas de Tempo Real
+- São sistemas que trabalham sob **restrições temporais**.  
+- Não estão relacionados diretamente à **velocidade**, mas sim à **previsibilidade**, dependendo do contexto e da aplicação.  
+
+- **Soft real-time**  
+  - Sistemas que podem continuar funcionando corretamente mesmo que algumas restrições de tempo não sejam respeitadas.  
+  - Exemplos: sistema de aquisição de dados, player de áudio, vidro elétrico de um carro.  
+
+- **Hard real-time**  
+  - Sistemas que **devem cumprir rigorosamente as restrições temporais**, sob risco de consequências graves ou catastróficas.  
+  - Normalmente estão relacionados à **segurança e à vida humana**.  
+  - Exemplos: sistemas de controle de um avião, freio ABS, controle de mísseis.  
+
+- A maioria dos sistemas de tempo real existentes utiliza uma **combinação de requisitos Soft e Hard**.  
+
+
+### Background e Foreground
+
+<p align="center">
+  <img src="./src/background-foreground.png" alt="Background e Foreground">
+</p>
+
+Em sistemas embarcados simples, a execução do software geralmente segue o modelo **background/foreground**.
+
+- **Background**  
+  - Corresponde a um **laço infinito** (main loop) que executa continuamente.  
+  - Esse laço chama módulos ou funções responsáveis por realizar as operações desejadas, como leitura de sensores, atualização de variáveis ou envio de dados.  
+  - É considerado processamento **não prioritário**, pois roda apenas quando não há tarefas mais urgentes.  
+
+- **Foreground**  
+  - Corresponde às **interrupções** ou rotinas que interrompem o fluxo normal do programa para tratar eventos assíncronos (ex.: temporizadores, recepção de dados via UART, acionamento de botão).  
+  - É considerado processamento **prioritário**, pois ocorre de forma assíncrona e deve ser atendido rapidamente.  
+
+* Nesse tipo de sistema, operações críticas devem ser executadas pelas **interrupções**, de modo a garantir os requisitos de tempo.  
+  - As informações disponibilizadas nas interrupções podem ser processadas **na própria interrupção** ou posteriormente no **background**.  
+  - Quando processadas no background, o tempo até que essas informações sejam tratadas é chamado de **Tempo de Resposta da Tarefa**.  
+
+* O pior caso de tempo de resposta de uma tarefa depende do tempo de execução do **laço de background**.  
+* **O tempo de execução de um sistema background/foreground não é determinístico**
+
+#### Vantagens
+- Fácil e rápido de desenvolver
+- Não requer treinamento ou conhecimento de APIs específicas de um sistema operacional
+- Não consome recursos adicionais comparado à soluções que utilizam sistemas operacionais
+- **Solução ótima em projetos pequenos e com requisitos modestos de restrições de tempo**
+
+#### Desvantagens
+- Difícil garantir que uma operação será executada dentro das restrições de tempo
+- Todo código em background tem a mesma prioridade
+- Todo o sistema sofrerá o impacto se uma das funções demorar mais que o esperado
+- Dificuldade de coordenar o código quando mantido por múltiplos desenvolvedores
+
+### Tipos de Eventos
+
+- **Evento síncrono**  
+  - São previsíveis.  
+  - Ocorrem como resultado direto da execução do programa corrente.  
+
+- **Evento assíncrono**  
+  - São imprevisíveis e podem ocorrer várias vezes durante a execução.  
+  - Não estão diretamente relacionados às instruções do programa.  
+  - As **interrupções** são exemplos típicos de eventos assíncronos.  
+
+### Sistemas Operacionais  
+
+Um sistema operacional em sistemas embarcados pode ser analisado a partir de duas perspectivas:  
+
+#### Abordagem Top-Down  
+- Vista pela perspectiva do **usuário ou projetista**.  
+- Fornece **abstração do hardware**, funcionando como intermediário entre os aplicativos e os dispositivos físicos.  
+- Facilita o desenvolvimento de software, escondendo a complexidade do hardware subjacente.  
+
+#### Abordagem Bottom-Up  
+- Vista pela perspectiva **interna do sistema**.  
+- Atua como um **gerenciador de recursos**, controlando:  
+  - Quais tarefas podem ser executadas.  
+  - Quando cada tarefa será executada.  
+  - Quais recursos (CPU, memória, periféricos) cada tarefa pode utilizar.  
+- Foca na **organização e eficiência** do uso dos recursos disponíveis.  
+
+De modo geral, pode-se dizer que um sistema operacional possui as funções de: 
+* Gerenciamento de tempo e recursos de CPU
+* Gerenciamento de tarefas
+* Gerenciamento de memória
+* Gerenciamento de periféricos
+* Prover funcionalidades: sistema de arquivos, protocolos de rede, etc.
+
+### Sistema Operacional de Tempo Real (RTOS)
+
+- Possui recursos para garantir o **determinismo**, ou seja, previsibilidade no tempo de execução.  
+- O núcleo (**kernel**) de um RTOS inclui gerenciamento de:  
+  - **Memória**  
+  - **Tempo** (temporizadores, escalonamento)  
+  - **Tarefas** (criação, suspensão, exclusão, escalonamento)  
+  - **Recursos** (semáforos, mutex, filas de mensagens)  
+- Cabe ao **desenvolvedor** dividir o sistema em tarefas e atribuir **prioridades** de acordo com os requisitos do projeto.  
+- O RTOS atua como um **multiplexador do processador**, realizando o **chaveamento** ou **troca de contexto** entre tarefas conforme a política de escalonamento definida.  
+
+<p align="center">
+  <img src="./src/troca_contexto_tarefas.png" alt="Troca de Contexto de Tarefas">
+</p>
+
+#### Desvantagens
+* O núcleo de um RTOS adiciona overhead ao sistema devido a vários motivos:
+  - Troca de contexto: Custo computacional para passar a CPU de uma tarefa para outra
+  - Ocupar espaço de código para implementar sesu serviços
+  - Ocupar espaço em RAM para a manutenção de suas estruturas de dados
+  - Tipicamente o SO ocupa de 1% a 5% da CPU
+
+### Núcleo Cooperativo
+
+- Núcleos cooperativos requerem que cada tarefa **explicitamente desista do controle da CPU**.  
+- Os **eventos assíncronos** continuam a ser tratados por **rotinas de interrupção**.  
+- Uma interrupção pode fazer com que uma tarefa de maior prioridade saia do estado de **bloqueio** e entre na lista de **tarefas prontas para execução**.  
+- A tarefa de maior prioridade **somente ganhará o controle da CPU quando a tarefa em execução desistir do processamento**.  
+
+<p align="center">
+  <img src="./src/nucleo_cooperativo.png" alt="Núcleo Cooperativo">
+</p>
+
+#### Vantagens
+- Baixa latência nas interrupções.  
+- Permite a utilização de **funções não reentrantes**.  
+- O tempo de resposta das tarefas é limitado pelo **maior tempo de liberação da CPU** de uma tarefa (melhor desempenho em relação ao *super-loop*).  
+- Menor preocupação com **recursos compartilhados**,  
+  - embora a **exclusão mútua** ainda seja necessária para dispositivos de entrada/saída.  
+- Em relação ao *super-loop*:  
+  - As tarefas podem desistir da CPU várias vezes antes de completarem sua execução.  
+  - O tempo de resposta não depende de todo o laço, mas apenas do tempo da maior tarefa.  
+
+#### Desvantagens
+- **Tempo de resposta**: uma tarefa de maior prioridade pronta para execução pode ter que esperar até que a tarefa atual libere a CPU.  
+  - Apesar disso, ainda é previsível, podendo ser **determinístico**. 
+
+### Núcleo Preemptivo
+* Um núcleo preemptivo é utilizado quando a resposta do sistema a um determinado evento é importante
+* O controle da CPU é sempre dado a tarefa de maior prioridade pronta para execução no menor tempo possível
+* O tempo de execução das tarefas de maior prioridade é determinístico
+
+
+A preempção (suspensão) pode ser desencadeada por uma tarefa ou por uma interrupção
+<p align="center">
+  <img src="./src/nucleo_preemptivo.png" alt="Núcleo Cooperativo">
+</p>
+
+#### Função não-reentrante e os núcleos preemptivos
+* Uma função reentrante é uma função que pode ser utilizada por mais de uma tarefa sem a possibilidade de danificar dados 
+
+```c
+void strcpy(char *dest, char *src)
+{
+  while(*src)
+  {
+    *dest++ = *src++;
+  }
+}
+```
+
+#### Função não reentrante com variável global
+```c
+int teste;
+void swap(int *x, int *y)
+{
+  teste = *x;
+  *x = *y;
+  *y = teste;
+}
+```
+
+* A função não reentrante não protejida pode gerar problema em núcleos preemptivos
+  - Exemplos:
+    - malloc() e free()
+* Em núcleos preemptivos, a CPU pode ser interrompida a qualquer momento para executar uma tarefa de maior prioridade.
+
+* Isso torna muito mais provável que funções não reentrantes sejam interrompidas no meio da execução, causando inconsistências.
+
+<p align="center">
+  <img src="./src/funcao_nao_reentrante_preemptivo.png" alt="Núcleo Cooperativo">
+</p>
+
+--- 
+
+### Protothreads
+
+* Programação em threads mas que funcionam como FSM
+* Continuação local
+  -   Continuação da função a partir de um ponto de saída
+
+#### Macros para continuação local com switch-case
+```c
+  struct pt {
+    unsigned short lc;
+  };
+
+  #define PT_INIT(pt) (pt)->lc =0;
+
+  #define PT_BEGIN(pt) switch(pt->lc) { case 0:
+
+  #define PT_WAIT_UNTIL(pt, c) (pt)->lc = __LINE__; case __LINE__: \
+                                if(!(c)) return 1
+
+  #define PT_EXIT(pt) (pt)->lc=0; return 0
+
+  #define PT_END(pt) } (pt)->lc=0; return 0
+
+  // MODELO DE PROTOTHREAD
+
+  int a_protothread(struct pt *pt){
+    PT_BEGIN(pt);
+
+    PT_WAIT_UNTIL(pt, condition1); //⟲⟲
+
+    if(something){
+      PT_WAIT_UNTIL(pt, condition2); //⟲⟲⟲⟲
+    }
+
+    PT_END()
+  }
+
+
+  // EQUIVALENTE A 
+
+  int a_protothread(struct pt *pt){
+    switch(pt->lc) {
+      case 0:
+    pt->lc = 5; case 5:
+        if(!(condition1)) return 0;
+
+        if(something){
+          pt->lc = 10; case 10:
+          if(!(condition2)) return 0;
+        }
+    } return 1;
+  }
+```
+
+### Limitações das Protothreads
+
+#### Uso de `switch/case`
+- Como a implementação de protothreads é baseada em `switch/case` e números de linha (`__LINE__`), o uso explícito de `switch/case` dentro de uma protothread pode conflitar com a lógica de controle, gerando comportamento incorreto.  
+- Por isso, **não é recomendável utilizar `switch/case` diretamente dentro do corpo de uma protothread**.
+
+#### API das protothreads em funções chamadas
+- Sim, é possível utilizar macros da API dentro de funções chamadas por uma protothread, desde que a função também receba um ponteiro para a estrutura `struct pt`.  
+- Isso permite a criação de **protothreads aninhadas**, onde cada função mantém seu próprio estado de continuação.
+
+#### Variáveis com `static`
+- Como não há pilha dedicada para cada protothread, as variáveis locais normais são perdidas a cada retorno da função.  
+- Por isso, todas as variáveis que precisam persistir entre chamadas devem ser declaradas como `static`, garantindo sua retenção entre execuções.
+
+---
+
+### Vantagens das Protothreads
+
+#### Uso de uma única pilha
+- Reduz drasticamente o consumo de memória em sistemas embarcados com recursos limitados.
+
+#### Programação estruturada
+- O código das protothreads se parece com código sequencial tradicional, facilitando a leitura e manutenção.
+
+#### Simplicidade
+- Permitem implementar concorrência cooperativa sem necessidade de um escalonador complexo.
+
+#### Baixa sobrecarga
+- Não há necessidade de salvar/restaurar o contexto completo de registradores, como ocorre em threads reais.
+
+---
+
+### Desvantagens
+
+#### Não são preemptivas
+- A protothread só avança quando chamada explicitamente, o que significa que uma função bloqueante pode travar todo o sistema.
+
+#### Restrições de linguagem
+- Não é possível usar `switch/case` livremente.  
+- Variáveis locais comuns não são preservadas.  
+- Pilha não é isolada por protothread.  
+
+#### Menor flexibilidade
+- Não suportam paralelismo real, apenas **concorrência cooperativa**.
+
+--- 
+
+## Variáveis `volatile` e `static` no contexto de sistemas embarcados
+
+### Onde variáveis são alocadas na memória
+
+- **Variáveis globais/static não inicializadas**  
+  - Vão para a **seção `.bss`**.  
+  - São **inicializadas automaticamente com valor 0** durante o startup do sistema (antes do `main`).  
+
+- **Variáveis globais/static inicializadas**  
+  - Vão para a **seção `.data`**.  
+  - Os valores iniciais são armazenados na Flash (ROM) e copiados para a RAM na inicialização.  
+
+- **Variáveis locais (automáticas)**  
+  - Vão para a **pilha (stack)**.  
+  - São criadas quando a função é chamada e destruídas ao sair da função.  
+  - Não possuem valor inicial definido (contêm lixo de memória se não forem explicitamente inicializadas).  
+
+---
+
+### `volatile`
+- Indica ao compilador que o valor da variável **pode mudar de forma assíncrona** (por hardware, ISR, registradores de periféricos).  
+- Evita otimizações que poderiam remover leituras/escritas “aparentemente redundantes”.  
+- Muito usado em variáveis acessadas por **interrupções** ou **endereços de registradores mapeados em memória**.
+
+### `static`
+- Quando aplicado a variáveis locais, faz com que:  
+  - Elas sejam alocadas em memória estática (em `.bss` ou `.data`), **não na pilha**.  
+  - **Persistam entre chamadas da função**, mantendo o valor anterior.  
+- Quando aplicado a variáveis globais, restringe o **escopo de visibilidade** ao arquivo onde foram declaradas (internal linkage).  
+---
+
+## Inicialização de Memória e Execução até `main()` em Sistemas Embarcados
+
+1. **Como o programa chega até a `main()`?**  
+   - Após o **reset** do microcontrolador, o processador busca o endereço inicial na **vetor de interrupções** (em Flash).  
+   - O primeiro endereço do vetor aponta para o valor inicial da **pilha (stack pointer)**.  
+   - O segundo endereço aponta para a **rotina de Reset** (Reset Handler).  
+   - O **Reset Handler** não vai direto para `main()`: antes ele executa a rotina de **startup** (normalmente escrita em assembly ou C), que prepara todo o ambiente de execução.  
+   - Só depois dessa preparação o controle é transferido para a função `main()`.
+
+---
+
+2. **Como as variáveis são inicializadas?**  
+   O código de **startup** faz a inicialização da memória antes de chamar `main()`:
+   - **Seção `.data`** (variáveis globais/static inicializadas):  
+     - Os valores iniciais estão gravados em **Flash**.  
+     - Durante o startup, esses valores são **copiados para a RAM**, onde as variáveis de fato residirão durante a execução.  
+   - **Seção `.bss`** (variáveis globais/static não inicializadas ou explicitamente inicializadas com `0`):  
+     - Essa região é **zerada pelo startup** (todas as variáveis começam com 0).  
+   - **Variáveis locais (automáticas)**:  
+     - Criadas na **pilha (stack)** no momento da chamada da função.  
+     - **Não possuem valor inicial definido** (lixo de memória) caso não sejam explicitamente inicializadas pelo programador.
+
+---
+
+3. **Resumo da ordem de execução após o Reset**
+   1. Hardware inicializa o **stack pointer**.  
+   2. PC (Program Counter) é carregado com o endereço do **Reset Handler**.  
+   3. O **Reset Handler/startup**:
+      - Copia `.data` da Flash para a RAM.  
+      - Zera `.bss`.  
+      - Inicializa periféricos básicos (dependendo da implementação).  
+   4. Chama a função `main()`.  
+   5. Execução do programa do usuário começa.  
 
