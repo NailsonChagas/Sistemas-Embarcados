@@ -298,3 +298,25 @@ Em que seção da memória variáveis locais vão parar?
 * **Variáveis locais**: são alocadas na **stack** (pilha). Caso não sejam inicializadas, contêm **lixo de memória**.
 
 
+
+### **13) Processo de inicialização do microcontrolador**
+
+**Pergunta:**
+Descreva o processo de inicialização de um microcontrolador desde sua alimentação até chegar na função `main()`. Para qual região de memória o processador aponta ao ser alimentado? Que procedimentos devem ser realizados antes de ir para a função `main()`? Por que podemos dizer que a função `main()` é uma função privilegiada?
+
+**Resposta:**
+* Ao ligar: ocorre a interrupção de reset, processador começa no vetor de reset (memória de boot/flash).
+
+* **Startup code:**
+
+  -  Inicializa Stack Pointer (SP).
+
+  - Copia .data da flash para RAM.
+
+  - Zera .bss (globais não inicializadas).
+
+  - Configurações mínimas (clock/sistema).
+
+  - Chamada da main(): ponto de entrada do programa do usuário.
+
+Por que privilegiada? É o início formal da aplicação, só executa após ambiente estar pronto, controla todo o fluxo do programa.
