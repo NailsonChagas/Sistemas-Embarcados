@@ -281,6 +281,64 @@ int main(void){
 }
 ```
 
+```c 
+
+typedef enum {
+  ST_INIT,
+  ST_WAIT,
+  ST_PROCESS,
+  ST_END
+} states_t;
+
+struct StateMachine{
+  states_t state;
+  action_t action[ST_END];
+}
+
+void initSM (sm_t *sm{
+  sm->state = ST_INIT;
+  sm->action[ST_INIT] = initAction;
+  sm->action[ST_WAIT] = waitAction;
+  sm->action[ST_PROCESS] = processAction;
+}
+
+static void initAction(sm_t *sm, unsigned char event){
+  //inicializações
+  printf("%c", event);
+  sm->state = ST_WAIT;  
+}
+
+static void waitAction(sm_t *sm, unsigned char event){
+  //aguarda evento
+  if(event == 'a'){
+    sm->state = ST_PROCESS;
+  }
+}
+
+static void processAction(sm_t *sm, unsigned char event){
+  //processa evento
+  printf("%c", event);
+  sm->state = ST_WAIT;  
+}
+
+void ExecSM(sm_t *sm, unsigned char event, uint32_t qtd){
+  int i;
+  for(i=0; i<qtd; i++) {
+     sm->action[sm->state](sm, event);
+  }
+}
+
+int main (void){
+    sm_t sm, sm2;
+    initSM(&sm);
+    initSM(&sm2);
+    while(1){
+      ExecSM(&sm, 'a', 4);
+      ExecSM(&sm2, 'b', 4);
+    }
+}
+
+``` 
 ---
 ## Programação Concorrente - Sistemas de Tempo Real
 
@@ -453,7 +511,7 @@ void swap(int *x, int *y)
 }
 ```
 
-* A função não reentrante não protejida pode gerar problema em núcleos preemptivos
+* A função não reentrante não protegida pode gerar problema em núcleos preemptivos
   - Exemplos:
     - malloc() e free()
 * Em núcleos preemptivos, a CPU pode ser interrompida a qualquer momento para executar uma tarefa de maior prioridade.
