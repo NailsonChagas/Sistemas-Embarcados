@@ -1,0 +1,10 @@
+17:29:55 **** Incremental Build of configuration Debug for project egg_firmware ****
+make -j12 all 
+arm-none-eabi-size  egg_firmware.elf 
+   text	   data	    bss	    dec	    hex	filename
+  19340	     12	   2052	  21404	   539c	egg_firmware.elf
+Finished building: default.size.stdout
+ 
+
+17:29:55 Build Finished. 0 errors, 0 warnings. (took 157ms)
+
