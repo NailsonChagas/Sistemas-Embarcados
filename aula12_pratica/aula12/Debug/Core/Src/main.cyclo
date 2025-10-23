@@ -1,7 +1,9 @@
-../Core/Src/main.c:67:6:pisca_led	1
-../Core/Src/main.c:87:5:main	1
-../Core/Src/main.c:165:6:SystemClock_Config	3
-../Core/Src/main.c:211:13:MX_GPIO_Init	1
-../Core/Src/main.c:248:6:StartDefaultTask	1
-../Core/Src/main.c:267:6:HAL_TIM_PeriodElapsedCallback	2
-../Core/Src/main.c:285:6:Error_Handler	1
+../Core/Src/main.c:71:6:pisca_led	1
+../Core/Src/main.c:86:6:enviaSerial_1	1
+../Core/Src/main.c:101:5:main	1
+../Core/Src/main.c:184:6:SystemClock_Config	3
+../Core/Src/main.c:230:13:MX_LPUART1_UART_Init	5
+../Core/Src/main.c:277:13:MX_GPIO_Init	1
+../Core/Src/main.c:314:6:StartDefaultTask	1
+../Core/Src/main.c:333:6:HAL_TIM_PeriodElapsedCallback	2
+../Core/Src/main.c:351:6:Error_Handler	1
