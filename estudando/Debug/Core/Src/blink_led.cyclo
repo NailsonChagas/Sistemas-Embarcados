@@ -1,0 +1,2 @@
+../Core/Src/blink_led.c:9:6:blink_led	1
+../Core/Src/blink_led.c:27:6:get_led_state	1
